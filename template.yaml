@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  lambda-typescript-esbuild-template
+
+  Template repository for setting up a AWS Lambda project with TypeScript and esbuild.
+
+Parameters:
+  ExampleEnvVar:
+    Type: String
+    Description: Example environment variable. Same naming as in env.json but different casing and no hyphens.
+  DistFolder:
+    Type: String
+    Description: Sub-path to TS output folder. Used for local invocations.
+    Default: ""
+
+Globals:
+  Function:
+    Timeout: 10
+    Handler: !Join
+      - ""
+      - - !Ref DistFolder
+        - "index.handler"
+    Runtime: nodejs14.x
+    Architectures:
+      - x86_64
+
+Resources:
+  HelloWorld:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Hello-World
+      CodeUri: lambdas/hello-world
+      Environment:
+        Variables:
+          EXAMPLE_ENV_VAR: !Ref ExampleEnvVar
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - src/index.ts

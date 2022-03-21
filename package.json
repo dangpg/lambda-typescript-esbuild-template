@@ -1,0 +1,14 @@
+{
+  "name": "lambda-typescript-esbuild-template",
+  "version": "1.0.0",
+  "scripts": {
+    "clean": "rimraf .aws-sam",
+    "build": "sam.cmd build --beta-features",
+    "predeploy": "npm run build",
+    "deploy": "node scripts/deploy.js",
+    "postdeploy": "npm run clean"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  }
+}
